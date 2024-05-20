@@ -1,36 +1,44 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { NavLink, useNavigate } from 'react-router-dom';
+import Axios from '../config/axios';
+import { Alert } from '@mui/material';
+import useAuth from '../hooks/useAuth';
 
 export default function SignIn() {
+  const [error, setError] = useState("");
+  const { isLoggedIn, setUser, setTokens, setIsLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn)
+      navigate("/apartment")
+  }, [isLoggedIn])
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const loginBody = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+    Axios.post('/auth/login', loginBody)
+      .then(res => {
+        const { user, tokens } = res.data;
+        setUser(user);
+        setTokens(tokens);
+        setIsLoggedIn(true);
+      })
+      .catch(error => {
+        const msg = error.data.message;
+        setError(msg);
+      })
   };
 
   return (
@@ -70,10 +78,15 @@ export default function SignIn() {
             id="password"
             autoComplete="current-password"
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
+          {
+            error && <Alert severity="error" sx={{ mt: 2 }}>
+              {error}
+            </Alert>
+          }
           <Button
             type="submit"
             fullWidth
@@ -84,19 +97,18 @@ export default function SignIn() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              {/* <Link href="#" variant="body2">
                 Forgot password?
-              </Link>
+              </Link> */}
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <NavLink to="/register">
+                Don't have an account? Sign Up
+              </NavLink>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
     </>
   );
 }
