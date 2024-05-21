@@ -24,7 +24,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const setTokens = (tokens: Tokens) => {
-    Axios.defaults.headers.common["Authorization"] = tokens.access.token;
+    // Axios.defaults.headers.common["Authorization"] = tokens.access.token;
     localStorage.setItem("accessToken", tokens.access.token)
     localStorage.setItem("refreshToken", tokens.refresh.token)
   }
@@ -44,6 +44,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken") || "";
     const refreshToken = localStorage.getItem("refreshToken") || "";
+
+    if (!refreshToken)
+      return setIsLoggedIn(false);
 
     Axios.post("/auth/login-jwt", null, {
       headers: {

@@ -3,15 +3,20 @@ import { API_URL } from "./config";
 
 const Axios = axios.create({
   baseURL: API_URL,
-  headers: {
-    Authorization: localStorage.getItem("accessToken"),
-  },
 });
 
-Axios.interceptors.response.use(
-  (e) => {
-    return e;
+const getAccessToken = () => localStorage.getItem("accessToken");
+
+Axios.interceptors.request.use(
+  (config) => {
+    config.headers["Authorization"] = getAccessToken();
+    return config;
   },
+  (error) => console.error(error)
+);
+
+Axios.interceptors.response.use(
+  (e) => e,
   async (error) => {
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
@@ -29,11 +34,11 @@ Axios.interceptors.response.use(
           Axios.defaults.headers.common["Authorization"] = newAccessToken;
           Axios(originalRequest);
         } catch (e) {
-          return Promise.reject(e);
+          console.error(e);
         }
       }
     }
-    return Promise.reject(error);
+    return Promise.reject(error.response);
   }
 );
 

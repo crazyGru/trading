@@ -5,7 +5,6 @@ import NotFound from "./pages/NotFound"
 import AuthProvider from "./providers/AuthProvider"
 import PrivateRoutes from "./layouts/PrivateRoutes"
 import Apartment from "./pages/Apartment/Apartments"
-import ApartmentDetails from "./pages/Apartment/ApartmentDetails"
 import WithAppbar from "./layouts/WithAppbar"
 
 function App() {
@@ -18,7 +17,6 @@ function App() {
         <Route path="/apartment" element={<PrivateRoutes />}>
           <Route path="/apartment" element={<WithAppbar />}>
             <Route path="/apartment/" element={<Apartment />} />
-            <Route path="/apartment/:id" element={<ApartmentDetails />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
