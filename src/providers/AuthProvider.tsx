@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Axios from "../config/axios";
 
 interface AuthContextType {
@@ -22,6 +23,7 @@ export const authContext = createContext<AuthContextType>({
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const navigate = useNavigate();
 
   const setTokens = (tokens: Tokens) => {
     // Axios.defaults.headers.common["Authorization"] = tokens.access.token;
@@ -34,6 +36,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       .then(() => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        navigate("/login");
         setUser(null);
         setIsLoggedIn(false);
       }).catch(err => {

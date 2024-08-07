@@ -4,20 +4,18 @@ import Signup from "./pages/Signup/Signup"
 import NotFound from "./pages/NotFound"
 import AuthProvider from "./providers/AuthProvider"
 import PrivateRoutes from "./layouts/PrivateRoutes"
-import Apartment from "./pages/Apartment/Apartments"
+import Dashboard from "./pages/dashboard/Dashboard"
 import WithAppbar from "./layouts/WithAppbar"
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<Navigate to="/apartment" />} />
+        <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="/login" element={<Signin />} />
         <Route path="/register" element={<Signup />} />
-        <Route path="/apartment" element={<PrivateRoutes />}>
-          <Route path="/apartment" element={<WithAppbar />}>
-            <Route path="/apartment/" element={<Apartment />} />
-          </Route>
+        <Route path="/dashboard" element={<PrivateRoutes />}>
+            <Route path="/dashboard" element={<Dashboard />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

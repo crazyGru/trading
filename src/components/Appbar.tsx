@@ -25,7 +25,7 @@ export default function ButtonAppBar() {
         <Container maxWidth="xl">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Apartment Rental
+              BitCoin
             </Typography>
             <Box sx={{ flexGrow: 0 }}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -47,15 +47,6 @@ export default function ButtonAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {
-                  user?.role === "realtor" && <MenuItem
-                    onClick={() => {
-                      navigate('/apartment?mine');
-                      handleCloseUserMenu();
-                    }}>
-                    View my apartments
-                  </MenuItem>
-                }
                 <MenuItem onClick={() => logout()}>
                   Sign out
                 </MenuItem>

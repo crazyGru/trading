@@ -18,7 +18,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (isLoggedIn)
-      navigate("/apartment")
+      navigate("/dashboard")
   }, [isLoggedIn])
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
